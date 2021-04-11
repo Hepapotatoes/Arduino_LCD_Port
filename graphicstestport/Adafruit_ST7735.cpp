@@ -49,6 +49,7 @@ Adafruit_ST7735::Adafruit_ST7735(SPIClass *spiClass, int8_t cs, int8_t dc,
 
 // clang-format off
 static const uint8_t PROGMEM
+/*
   Bcmd[] = {                        // Init commands for 7735B screens
     18,                             // 18 commands in list:
     ST77XX_SWRESET,   ST_CMD_DELAY, //  1: Software reset, no args, w/delay
@@ -107,7 +108,7 @@ static const uint8_t PROGMEM
       10,                           //     10 ms delay
     ST77XX_DISPON,    ST_CMD_DELAY, // 18: Main screen turn on, no args, delay
       255 },                        //     255 = max (500 ms) delay
-
+*/
   Rcmd1[] = {                       // 7735R init, part 1 (red or green tab)
     15,                             // 15 commands in list:
     ST77XX_SWRESET,   ST_CMD_DELAY, //  1: Software reset, 0 args, w/delay
@@ -143,8 +144,8 @@ static const uint8_t PROGMEM
     ST77XX_MADCTL,  1,              // 14: Mem access ctl (directions), 1 arg:
       0xC8,                         //     row/col addr, bottom-top refresh
     ST77XX_COLMOD,  1,              // 15: set color mode, 1 arg, no delay:
-      0x05 },                       //     16-bit color
-
+      0x05 };                      //     16-bit color
+/*
   Rcmd2green[] = {                  // 7735R init, part 2 (green tab only)
     2,                              //  2 commands in list:
     ST77XX_CASET,   4,              //  1: Column addr set, 4 args, no delay:
@@ -197,7 +198,7 @@ static const uint8_t PROGMEM
       10,                           //     10 ms delay
     ST77XX_DISPON,    ST_CMD_DELAY, //  4: Main screen turn on, no args w/delay
       100 };                        //     100 ms delay
-
+*/
 // clang-format on
 
 /**************************************************************************/
@@ -205,11 +206,12 @@ static const uint8_t PROGMEM
     @brief  Initialization code common to all ST7735B displays
 */
 /**************************************************************************/
+/*
 void Adafruit_ST7735::initB(void) {
   commonInit(Bcmd);
   setRotation(0);
 }
-
+*/
 /**************************************************************************/
 /*!
     @brief  Initialization code common to all ST7735R displays
@@ -218,6 +220,7 @@ void Adafruit_ST7735::initB(void) {
 /**************************************************************************/
 void Adafruit_ST7735::initR(uint8_t options) {
   commonInit(Rcmd1);
+  /*
   if (options == INITR_GREENTAB) {
     displayInit(Rcmd2green);
     _colstart = 2;
@@ -239,13 +242,13 @@ void Adafruit_ST7735::initR(uint8_t options) {
     displayInit(Rcmd2red);
   }
   displayInit(Rcmd3);
-
+*/
   // Black tab, change MADCTL color filter
   if ((options == INITR_BLACKTAB) || (options == INITR_MINI160x80)) {
     uint8_t data = 0xC0;
     sendCommand(ST77XX_MADCTL, &data, 1);
   }
-
+/*
   if (options == INITR_HALLOWING) {
     // Hallowing is simply a 1.44" green tab upside-down:
     tabcolor = INITR_144GREENTAB;
@@ -253,7 +256,7 @@ void Adafruit_ST7735::initR(uint8_t options) {
   } else {
     tabcolor = options;
     setRotation(0);
-  }
+  }*/
 }
 
 // OTHER FUNCTIONS *********************************************************
@@ -264,17 +267,18 @@ void Adafruit_ST7735::initR(uint8_t options) {
     @param  m  The index for rotation, from 0-3 inclusive
 */
 /**************************************************************************/
+
 void Adafruit_ST7735::setRotation(uint8_t m) {
   uint8_t madctl = 0;
 
   rotation = m & 3; // can't be higher than 3
-
+/*
   // For ST7735 with GREEN TAB (including HalloWing)...
   if ((tabcolor == INITR_144GREENTAB) || (tabcolor == INITR_HALLOWING)) {
     // ..._rowstart is 3 for rotations 0&1, 1 for rotations 2&3
     _rowstart = (rotation < 2) ? 3 : 1;
   }
-
+*/
   switch (rotation) {
   case 0:
     if ((tabcolor == INITR_BLACKTAB) || (tabcolor == INITR_MINI160x80)) {
